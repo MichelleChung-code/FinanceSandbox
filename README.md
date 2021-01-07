@@ -1,2 +1,2 @@
-# python_finance
-To practice finance application of python 
+# FinanceSandbox
+Sandbox for practising python in financial applications
