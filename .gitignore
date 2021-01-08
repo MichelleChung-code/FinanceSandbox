@@ -1,5 +1,8 @@
 # IntelliJ Pycharm Files 
 *.idea*
 
+# Cache files
+*.pyc
+
 # Jupyter notebook auto saving
 *-checkpoint.ipynb

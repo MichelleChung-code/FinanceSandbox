@@ -21,4 +21,3 @@ def BSM_pricing_value(S, K, r, t, sigma):
     d2 = d1 - sigma * (t ** 0.5)
 
     return S * norm.cdf(d1) - K * np.exp(-r * t) * norm.cdf(d2)
-
