@@ -41,6 +41,17 @@ class PlotStockData:
         self.plot_results()
 
 
+def extract_data(ticker, start_date, end_date):
+    return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
+
+
 if __name__ == '__main__':
-    stock_data = PlotStockData('AAPL', '2010-01-01', '2020-12-31')
+    ticker = 'AAPL'
+    start_date = '2010-01-01'
+    end_date = '2020-12-31'
+
+    stock_data = PlotStockData(ticker, start_date, end_date)
     stock_data()
+
+    df = extract_data(ticker, start_date, end_date)
+    print(df.head())
