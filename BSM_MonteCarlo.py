@@ -1,6 +1,8 @@
 import numpy as np
 from common.timeit import timeit
 from black_scholes_merton import BSM_pricing_value
+from common.simple_line_plot import show_line_plot
+
 
 @timeit
 def BSM_monte_carlo(iter_num, step_num, S, K, r, t, sigma):
@@ -41,6 +43,8 @@ def BSM_monte_carlo(iter_num, step_num, S, K, r, t, sigma):
     inner_vals_ht = np.maximum(S_arr[-1] - K, 0)
 
     # plot S_arr for the simulation of the changing price over the time intervals
+    # Just plot the first 20 time intervals
+    show_line_plot(S_arr[:, :20], 'BSM Monte Carlo', 'time steps', 'price', plot_arr=True)
 
     # return the monte carlo estimator, C
     return np.exp(-r * t) * (1 / iter_num) * sum(inner_vals_ht)
