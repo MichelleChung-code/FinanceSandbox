@@ -42,6 +42,17 @@ class PlotStockData:
 
 
 def extract_data(ticker, start_date, end_date):
+    """
+    Extracts the stock data from yahoo given the ticker and desired timeframe
+
+    Args:
+        ticker: <str> stock ticker
+        start_date: <str> YYYY-MM-DD start date for data
+        end_date: <str> YYYY-MM-DD end date for data
+
+    Returns: <pd.DataFrame> containing data for 'High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close'
+
+    """
     return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
 
 
