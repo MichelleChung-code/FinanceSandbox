@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import pandas as pd
 
 def show_line_plot(x_series, title, x_label, y_label, y_series=False, plot_arr=False):
     """
@@ -19,7 +19,10 @@ def show_line_plot(x_series, title, x_label, y_label, y_series=False, plot_arr=F
     fig = plt.subplots()
 
     if plot_arr:
-        plt.plot(x_series)
+        if isinstance(x_series, pd.DataFrame):
+            x_series.plot(grid=True)
+        else:
+            plt.plot(x_series)
     else:
         if not y_series:
             raise Exception('If plot_arr is False, y_series must be provided')
