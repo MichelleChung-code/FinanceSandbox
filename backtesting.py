@@ -23,6 +23,16 @@ SIGNALS_DICT = {1: BUY, -1: SELL, 0: HOLD}
 
 
 def backtesting(benchmark_index, signal_tolerance, start_date, end_date=datetime.today().strftime('%Y-%m-%d')):
+    """
+    Backtest performance of a stock if following a signal based strategy to buy if the monthly rolling average exceeds
+    a signal tolerance over the annual rolling average.  Rules for sell and hold follow simularly.
+
+    Args:
+        benchmark_index: <str> ticker for the stock of interest
+        signal_tolerance: <int> tolerance controlling the buy, sell, hold actions
+        start_date: <str> YYYY-MM-DD start date for data
+        end_date: <str> YYYY-MM-DD end date for data.  Defaults to today if not provided.
+    """
     benchmark_historic_data = extract_data(ticker=benchmark_index, start_date=start_date, end_date=end_date)
 
     # Get the rolling average annual and per month
