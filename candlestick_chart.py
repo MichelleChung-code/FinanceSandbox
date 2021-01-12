@@ -40,7 +40,7 @@ class CandleStickPlot:
         plt.tight_layout()
 
         if self.res_path:
-            plt.savefig(os.path.join(self.res_path, '{}_{}_{}.png'.format(self.ticker, self.start_date, self.end_date)))
+            plt.savefig(os.path.join(self.res_path, '{}_{}_{}_candlestick.png'.format(self.ticker, self.start_date, self.end_date)))
 
         plt.show()
 
