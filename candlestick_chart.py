@@ -10,6 +10,15 @@ import matplotlib.pyplot as plt
 
 class CandleStickPlot:
     def __init__(self, ticker, start_date, end_date=dt.datetime.today().strftime('%Y-%m-%d'), res_path=False):
+        """
+        Create candlestick plot of given stock
+
+        Args:
+            ticker: <str> stock ticker
+            start_date: <str> YYYY-MM-DD start date for the data pull and display
+            end_date: <str> YYYY-MM-DD end date for the data pull and display.  Defaults to today if not provided.
+            res_path: <str> path to results folder to save image of the resulting plot.  If False, will not save image.
+        """
         self.ticker = ticker
         self.start_date = start_date
         self.end_date = end_date
@@ -17,6 +26,8 @@ class CandleStickPlot:
         self.data = extract_data(ticker, start_date, end_date)
 
     def preprocess(self):
+        """ Clean extracted data such that it can be an input into matplotlib's candlestick_ochl function used for
+         plotting """
         # need to get in format for candlestick_ochl function
         self.data.index.name = const.DATE
         self.data.reset_index(inplace=True)
@@ -28,6 +39,7 @@ class CandleStickPlot:
         self.data[const.DATE] = dates.date2num(self.data[const.DATE].to_numpy())
 
     def plot_candlestick(self):
+        """" Create the candlestick plot """
         fig, ax = plt.subplots()
 
         candlestick_ochl(ax, self.data.to_numpy(), width=0.5)
@@ -40,7 +52,8 @@ class CandleStickPlot:
         plt.tight_layout()
 
         if self.res_path:
-            plt.savefig(os.path.join(self.res_path, '{}_{}_{}_candlestick.png'.format(self.ticker, self.start_date, self.end_date)))
+            plt.savefig(os.path.join(self.res_path,
+                                     '{}_{}_{}_candlestick.png'.format(self.ticker, self.start_date, self.end_date)))
 
         plt.show()
 
