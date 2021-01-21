@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import data
+import common.constants as const
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -56,13 +57,25 @@ def extract_data(ticker, start_date, end_date):
     return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
 
 
+def plot_bar_volume(ticker, start_date, end_date):
+    data = extract_data(ticker, start_date, end_date)
+
+    plt.bar(data.index, data[const.VOLUME], width=0.5)
+    plt.xticks(rotation=30)
+    plt.title('{vol} of {tick}'.format(vol=const.VOLUME, tick=ticker))
+    plt.ylabel(const.VOLUME)
+    plt.show()
+
+
 if __name__ == '__main__':
     ticker = 'AAPL'
-    start_date = '2010-01-01'
-    end_date = '2020-12-31'
+    start_date = '2020-01-01'
+    end_date = '2020-03-01'
 
-    stock_data = PlotStockData(ticker, start_date, end_date)
-    stock_data()
+    plot_bar_volume(ticker, start_date, end_date)
+
+    # stock_data = PlotStockData(ticker, start_date, end_date)
+    # stock_data()
 
     df = extract_data(ticker, start_date, end_date)
     print(df.head())
