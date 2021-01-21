@@ -7,12 +7,6 @@ import common.constants as const
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
-LOG_RET_DLY = 'log_ret_dly'
-ADJ_CLOSE_PRC = 'Adj Close'
-VOLATILITY = 'volatility'
-
-num_trading_days = 252
-
 
 class PlotStockData:
 
@@ -21,15 +15,17 @@ class PlotStockData:
         self.ticker = ticker
 
     def compute_log_return(self):
-        self.stock_data[LOG_RET_DLY] = np.log(self.stock_data[ADJ_CLOSE_PRC] / self.stock_data[ADJ_CLOSE_PRC].shift(1))
+        self.stock_data[const.LOG_RET_DLY] = np.log(
+            self.stock_data[const.ADJ_CLOSE_PRC] / self.stock_data[const.ADJ_CLOSE_PRC].shift(1))
 
     def compute_annual_vol(self):
-        self.stock_data[VOLATILITY] = self.stock_data[LOG_RET_DLY].rolling(num_trading_days).std() * np.log(
-            num_trading_days)
+        self.stock_data[const.VOLATILITY] = self.stock_data[const.LOG_RET_DLY].rolling(
+            const.num_trading_days).std() * np.log(
+            const.num_trading_days)
 
     def plot_results(self):
-        plt.plot(self.stock_data[LOG_RET_DLY], label=LOG_RET_DLY)
-        plt.plot(self.stock_data[VOLATILITY], label=VOLATILITY)
+        plt.plot(self.stock_data[const.LOG_RET_DLY], label=const.LOG_RET_DLY)
+        plt.plot(self.stock_data[const.VOLATILITY], label=const.VOLATILITY)
         plt.legend()
         plt.title('{} Log Returns and Annual Volatility Timeseries'.format(self.ticker))
         plt.xlabel('Date')
@@ -69,13 +65,13 @@ def plot_bar_volume(ticker, start_date, end_date):
 
 if __name__ == '__main__':
     ticker = 'AAPL'
-    start_date = '2020-01-01'
+    start_date = '2014-01-01'
     end_date = '2020-03-01'
 
     plot_bar_volume(ticker, start_date, end_date)
 
-    # stock_data = PlotStockData(ticker, start_date, end_date)
-    # stock_data()
+    stock_data = PlotStockData(ticker, start_date, end_date)
+    stock_data()
 
     df = extract_data(ticker, start_date, end_date)
     print(df.head())
