@@ -1,7 +1,7 @@
 import numpy as np
-from common.timeit import timeit
-from black_scholes_merton import BSM_pricing_value
-from common.simple_line_plot import show_line_plot
+from src.main.python.common.timeit import timeit
+from src.main.python.black_scholes_merton import BSM_pricing_value
+from src.main.python.common.simple_line_plot import show_line_plot
 
 
 @timeit

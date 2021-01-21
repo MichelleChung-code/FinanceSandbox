@@ -1,7 +1,7 @@
-from SimpleStockDataPlot import extract_data
+from src.main.python.SimpleStockDataPlot import extract_data
 import pandas as pd
-from common.simple_line_plot import show_line_plot
-from common.common_functions import log_return
+from src.main.python.common.simple_line_plot import show_line_plot
+from src.main.python.common.common_functions import log_return
 from datetime import datetime
 
 pd.set_option('display.max_columns', None)

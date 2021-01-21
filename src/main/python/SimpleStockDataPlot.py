@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import data
-import common.constants as const
+from src.main.python.common import constants as const
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

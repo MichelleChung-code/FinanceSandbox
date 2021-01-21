@@ -1,8 +1,8 @@
 from mplfinance.original_flavor import candlestick_ochl
 import os
 from pathlib import Path
-from SimpleStockDataPlot import extract_data
-import common.constants as const
+from src.main.python.SimpleStockDataPlot import extract_data
+from src.main.python.common import constants as const
 import datetime as dt
 import matplotlib.dates as dates
 import matplotlib.pyplot as plt
@@ -64,6 +64,6 @@ class CandleStickPlot:
 
 if __name__ == '__main__':
     ticker = '^GSPC'
-    results_folder_path = os.path.join(str(Path(__file__).parents[0]), 'results')
+    results_folder_path = os.path.join(str(Path(__file__).parents[0]), '../../../results')
     x = CandleStickPlot(ticker, start_date='2020-12-01', res_path=results_folder_path)
     x()
