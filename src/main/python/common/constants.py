@@ -13,4 +13,16 @@ LOG_RET_DLY = 'log_ret_dly'
 ADJ_CLOSE_PRC = 'Adj Close'
 VOLATILITY = 'volatility'
 
-num_trading_days = 252
+NUM_TRADE_DAYS_PER_YR = 252
+
+# for the backtesting,py file
+NUM_TRADE_DAYS_PER_MONTH = 21
+COL_NUM_TRADE_DAYS_YR_TREND = '{}_days'.format(NUM_TRADE_DAYS_PER_YR)
+COL_NUM_TRADE_DAYS_MONTH_TREND = '{}_days'.format(NUM_TRADE_DAYS_PER_MONTH)
+BUY = 'BUY'
+SELL = 'SELL'
+HOLD = 'HOLD'
+
+SIGNAL_VAL = 'signal_val'
+SIGNAL_NAME = 'signal_name'
+SIGNALS_DICT = {1: BUY, -1: SELL, 0: HOLD}

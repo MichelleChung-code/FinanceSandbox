@@ -4,22 +4,11 @@ from src.main.python.common.simple_line_plot import show_line_plot
 from src.main.python.common.common_functions import log_return
 from datetime import datetime
 
+from src.main.python.common.constants import CLOSE, NUM_TRADE_DAYS_PER_YR, NUM_TRADE_DAYS_PER_MONTH, \
+    COL_NUM_TRADE_DAYS_YR_TREND, COL_NUM_TRADE_DAYS_MONTH_TREND, SIGNAL_VAL, SIGNAL_NAME, SIGNALS_DICT
+
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
-
-# constants
-CLOSE = 'Close'
-NUM_TRADE_DAYS_PER_YR = 252
-NUM_TRADE_DAYS_PER_MONTH = 21
-COL_NUM_TRADE_DAYS_YR_TREND = '{}_days'.format(NUM_TRADE_DAYS_PER_YR)
-COL_NUM_TRADE_DAYS_MONTH_TREND = '{}_days'.format(NUM_TRADE_DAYS_PER_MONTH)
-BUY = 'BUY'
-SELL = 'SELL'
-HOLD = 'HOLD'
-
-SIGNAL_VAL = 'signal_val'
-SIGNAL_NAME = 'signal_name'
-SIGNALS_DICT = {1: BUY, -1: SELL, 0: HOLD}
 
 
 def backtesting(benchmark_index, signal_tolerance, start_date, end_date=datetime.today().strftime('%Y-%m-%d')):

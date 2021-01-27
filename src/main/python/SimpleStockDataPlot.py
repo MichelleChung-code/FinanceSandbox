@@ -20,8 +20,8 @@ class PlotStockData:
 
     def compute_annual_vol(self):
         self.stock_data[const.VOLATILITY] = self.stock_data[const.LOG_RET_DLY].rolling(
-            const.num_trading_days).std() * np.log(
-            const.num_trading_days)
+            const.NUM_TRADE_DAYS_PER_YR).std() * np.log(
+            const.NUM_TRADE_DAYS_PER_YR)
 
     def plot_results(self):
         plt.plot(self.stock_data[const.LOG_RET_DLY], label=const.LOG_RET_DLY)
