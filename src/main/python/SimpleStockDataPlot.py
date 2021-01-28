@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import data
 from src.main.python.common import constants as const
+import yfinance as yf
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -50,6 +51,9 @@ def extract_data(ticker, start_date, end_date):
     Returns: <pd.DataFrame> containing data for 'High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close'
 
     """
+
+    name = yf.Ticker(ticker)
+    print('Data extracted for: {}'.format(name.info['longName']))
     return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
 
 
