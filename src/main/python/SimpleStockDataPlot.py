@@ -53,7 +53,10 @@ def extract_data(ticker, start_date, end_date):
     """
 
     name = yf.Ticker(ticker)
-    print('Data extracted for: {}'.format(name.info['longName']))
+    try:
+        print('Data extracted for: {}'.format(name.info['longName']))
+    except:
+        print('No long name for {} available'.format(ticker))
     return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
 
 
