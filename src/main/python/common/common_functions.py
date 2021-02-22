@@ -60,6 +60,14 @@ def rolling_standard_deviation(df, col_name, window=const.NUM_TRADE_DAYS_PER_YR)
     return df, res_col_name
 
 
+# TODO add docstrings
+def rolling_correlation(df, col_name1, col_name2, window=const.NUM_TRADE_DAYS_PER_YR):
+    s1 = df[col_name1]
+    s2 = df[col_name2]
+
+    return s1.rolling(window).corr(s2)
+
+
 if __name__ == '__main__':
     from src.main.python.SimpleStockDataPlot import extract_data
 
