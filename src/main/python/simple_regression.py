@@ -11,9 +11,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# todo add docstrings
 class SimpleRegression:
     def __init__(self, ticker1, start_date, end_date=dt.datetime.today().strftime('%Y-%m-%d')):
+        """
+        Args:
+            ticker1: <str> ticker of stock to run regression against VSTOXX on
+            start_date: <str> YYYY-MM-DD format
+            end_date: <str> YYYY-MM-DD format, defaults to today
+        """
         self.ticker1_data = extract_data(ticker1, start_date, end_date)
 
         vstoxx_url = r'http://www.stoxx.com/download/historical_values/h_vstoxx.txt'
@@ -30,6 +35,12 @@ class SimpleRegression:
         self.ticker2_nme = 'V2TX'
 
     def run_reg(self, df):
+        """
+        Runs the linear regression and generates plots
+
+        Args:
+            df: <pd.DataFrame> containing the cleaned data to directly regress
+        """
         Y = df[self.ticker2_nme]
         X = df[self.ticker1_nme]
         X = sm.add_constant(X)
@@ -67,6 +78,13 @@ class SimpleRegression:
         self.run_reg(df)
 
     def prep_data(self):
+        """
+        Cleans and prepares data to regress. Truncate dates to available data, process missing middle data, calculate
+        log returns.
+
+        Returns:
+            df: <pd.DataFrame> containing the cleaned data.
+        """
         # truncate both to the same time frame for min and max available data
         min_date = max(self.ticker1_data.index.min(), self.ticker2_data.index.min())
         max_date = min(self.ticker1_data.index.max(), self.ticker2_data.index.max())

@@ -60,8 +60,19 @@ def rolling_standard_deviation(df, col_name, window=const.NUM_TRADE_DAYS_PER_YR)
     return df, res_col_name
 
 
-# TODO add docstrings
 def rolling_correlation(df, col_name1, col_name2, window=const.NUM_TRADE_DAYS_PER_YR):
+    """
+    Compute the rolling correlation (Pearson's) between two columns
+
+    Args:
+        df: <pd.DataFrame> to calculate on
+        col_name1: <str> name of first column
+        col_name2: <str> name of second column
+        window: <int> window size in number of days
+
+    Returns:
+        <pd.Series> containing the rolling correlation
+    """
     s1 = df[col_name1]
     s2 = df[col_name2]
 
