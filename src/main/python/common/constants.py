@@ -6,6 +6,8 @@ OPEN = 'Open'
 CLOSE = 'Close'
 VOLUME = 'Volume'
 ADJ_CLOSE = 'Adj Close'
+TICKER = 'Ticker'
+
 
 DATE = 'Date'
 
