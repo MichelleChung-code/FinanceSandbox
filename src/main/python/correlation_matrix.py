@@ -49,6 +49,8 @@ def plot_corr_mat(ls_tickers, start_date, end_date, res_path):
 
 if __name__ == '__main__':
     ls_tickers = ['AAL', 'AA', 'AAPL', 'BBY', 'C', 'CVS', 'HD', 'IBM']
+
+    # Get 10 years worth of historical data
     start_date = (dt.datetime.today() - relativedelta(years=10)).strftime('%Y-%m-%d')
     end_date = dt.datetime.today().strftime('%Y-%m-%d')
     res_path = os.path.join(str(Path(__file__).parents[3]), 'results')
