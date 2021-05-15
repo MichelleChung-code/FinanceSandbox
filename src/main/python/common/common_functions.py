@@ -122,6 +122,7 @@ def read_from_disk(input_pkl_path):
     return data
 
 
+
 if __name__ == '__main__':
     # from src.main.python.SimpleStockDataPlot import extract_data
     #
