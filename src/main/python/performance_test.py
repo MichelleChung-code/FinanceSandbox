@@ -1,6 +1,9 @@
 from src.main.python.common.timeit import timeit
 import numexpr as ne
 import numpy as np
+import math
+# import numba as nb
+from numba import jit
 
 
 @timeit
@@ -33,6 +36,25 @@ def multi_threaded(A_np, expression, num_threads):
     return ne.evaluate(expression)
 
 
+@timeit
+def f_python(i, j):
+    # python implementation
+    result = 0
+    for x in range(i):
+        for y in range(j):
+            result += math.cos(math.log(1))
+
+    return result
+
+
+@timeit
+@jit(nopython=True)
+def f_numpy(i, j):
+    # vectorized with numpy and use numba for even more optimization
+    x = np.ones((i, j))
+    return np.sum(np.cos(np.log(x)))
+
+
 if __name__ == '__main__':
     I = 5000000
     A_np = np.arange(I)  # make array of length I
@@ -40,3 +62,7 @@ if __name__ == '__main__':
 
     res_single = single_threaded(A_np, ex)
     res_multi = multi_threaded(A_np, ex, 10)
+
+    i, j = 5000, 5000
+    res_py = f_python(i, j)
+    res_np = f_numpy(i, j)
