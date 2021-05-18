@@ -49,7 +49,3 @@ def BSM_monte_carlo(iter_num, step_num, S, K, r, t, sigma):
     # return the monte carlo estimator, C
     return np.exp(-r * t) * (1 / iter_num) * sum(inner_vals_ht)
 
-
-if __name__ == '__main__':
-    print(BSM_monte_carlo(500000, 100, 100, 200, 0.05, 2, 0.2))
-    print(BSM_pricing_value(100, 200, 0.05, 2, 0.2))

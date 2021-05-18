@@ -68,17 +68,3 @@ def plot_bar_volume(ticker, start_date, end_date):
     plt.title('{vol} of {tick}'.format(vol=const.VOLUME, tick=ticker))
     plt.ylabel(const.VOLUME)
     plt.show()
-
-
-if __name__ == '__main__':
-    ticker = 'AAPL'
-    start_date = '2014-01-01'
-    end_date = '2020-03-01'
-
-    plot_bar_volume(ticker, start_date, end_date)
-
-    stock_data = PlotStockData(ticker, start_date, end_date)
-    stock_data()
-
-    df = extract_data(ticker, start_date, end_date)
-    print(df.head())

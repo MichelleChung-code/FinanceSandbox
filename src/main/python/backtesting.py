@@ -63,12 +63,6 @@ def backtesting(benchmark_index, signal_tolerance, start_date, end_date=datetime
     benchmark_historic_data.rename(columns={original_returns_col_name: 'Market'}, inplace=True)
 
     show_line_plot(benchmark_historic_data[['Market', 'Custom']],
-                   title='Backtesting of {}'.format(benchmark_index_ticker), x_label='Date',
+                   title='Backtesting of {}'.format(benchmark_index), x_label='Date',
                    y_label='Cumulative Returns',
                    plot_arr=True)
-
-
-if __name__ == '__main__':
-    benchmark_index_ticker = '^DJI'
-
-    backtesting(benchmark_index_ticker, 50, start_date='2000-01-01')

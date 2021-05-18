@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 
-def plot_corr_mat(ls_tickers, start_date, end_date, res_path):
+def plot_corr_mat(ls_tickers, start_date, end_date, res_path=False):
     """
     Plot heatmap showing pearson's correlation matrix between inputted stocks
 
@@ -17,7 +17,7 @@ def plot_corr_mat(ls_tickers, start_date, end_date, res_path):
         ls_tickers: <list> of tickers to produce correlation matrix
         start_date: <str> YYYY-MM-DD start date for data
         end_date: <str> YYYY-MM-DD end date for data
-        res_path: <str> output path to save plot to
+        res_path: <str> output path to save plot to, defaults to False i.e. not saved
 
     """
     df_res_ls = []
@@ -41,7 +41,8 @@ def plot_corr_mat(ls_tickers, start_date, end_date, res_path):
     # plotting
     fig = plt.figure()
     seaborn.heatmap(df, cmap='RdYlGn', annot=True)
-    plt.savefig(os.path.join(res_path, 'corr_mat_{}_{}'.format(start_date, end_date)))
+    if res_path:
+        plt.savefig(os.path.join(res_path, 'corr_mat_{}_{}'.format(start_date, end_date)))
 
     # .show() must go after .savefig() or else saved figure will be blank
     plt.show()

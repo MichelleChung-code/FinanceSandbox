@@ -111,6 +111,4 @@ class SimpleRegression:
         return df
 
 
-if __name__ == '__main__':
-    x = SimpleRegression('^STOXX50E', '1999-01-01')
-    x()
+
