@@ -1,4 +1,4 @@
 :: For Jenkins CI Set-Up
 
-cd "%WORKSPACE%\src\main\python\"
+cd "%WORKSPACE%"
 python -m unittest discover "%WORKSPACE%\src\main\python\unittests"
