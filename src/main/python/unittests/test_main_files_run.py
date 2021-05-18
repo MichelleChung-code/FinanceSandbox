@@ -19,7 +19,7 @@ class MainFilesRun(unittest.TestCase):
     #
     #     BSM_monte_carlo(500000, 100, 100, 200, 0.05, 2, 0.2)
     #     BSM_pricing_value(100, 200, 0.05, 2, 0.2)
-    # 
+    #
     # def test_candlestick_chart(self):
     #     """ Tests successful run of candlestick_chart.py """
     #     from src.main.python.candlestick_chart import CandleStickPlot
