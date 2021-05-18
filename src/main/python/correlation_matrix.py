@@ -1,5 +1,5 @@
-from src.main.python.SimpleStockDataPlot import extract_data
-import src.main.python.common.constants as consts
+from SimpleStockDataPlot import extract_data
+import common.constants as consts
 from dateutil.relativedelta import relativedelta
 import datetime as dt
 import pandas as pd

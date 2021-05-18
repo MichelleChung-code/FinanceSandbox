@@ -1,5 +1,5 @@
 import numpy as np
-import src.main.python.common.constants as const
+import common.constants as const
 import matplotlib.pyplot as plt
 import pickle
 import os
@@ -124,7 +124,7 @@ def read_from_disk(input_pkl_path):
 
 
 if __name__ == '__main__':
-    # from src.main.python.SimpleStockDataPlot import extract_data
+    # from SimpleStockDataPlot import extract_data
     #
     # ticker = '^GDAXI'
     # start_date = '2000-01-01'

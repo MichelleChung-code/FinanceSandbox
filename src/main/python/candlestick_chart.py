@@ -1,8 +1,8 @@
 from mplfinance.original_flavor import candlestick_ochl
 import os
 from pathlib import Path
-from src.main.python.SimpleStockDataPlot import extract_data
-from src.main.python.common import constants as const
+from SimpleStockDataPlot import extract_data
+from common import constants as const
 import datetime as dt
 import matplotlib.dates as dates
 import matplotlib.pyplot as plt

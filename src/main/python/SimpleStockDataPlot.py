@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import data
-from src.main.python.common import constants as const
+from common import constants as const
 import yfinance as yf
 
 pd.set_option('display.max_columns', None)

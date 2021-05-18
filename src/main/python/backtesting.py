@@ -1,10 +1,10 @@
-from src.main.python.SimpleStockDataPlot import extract_data
+from SimpleStockDataPlot import extract_data
 import pandas as pd
-from src.main.python.common.simple_line_plot import show_line_plot
-from src.main.python.common.common_functions import log_return
+from common.simple_line_plot import show_line_plot
+from common.common_functions import log_return
 from datetime import datetime
 
-from src.main.python.common.constants import CLOSE, NUM_TRADE_DAYS_PER_YR, NUM_TRADE_DAYS_PER_MONTH, \
+from common.constants import CLOSE, NUM_TRADE_DAYS_PER_YR, NUM_TRADE_DAYS_PER_MONTH, \
     COL_NUM_TRADE_DAYS_YR_TREND, COL_NUM_TRADE_DAYS_MONTH_TREND, SIGNAL_VAL, SIGNAL_NAME, SIGNALS_DICT
 
 pd.set_option('display.max_columns', None)

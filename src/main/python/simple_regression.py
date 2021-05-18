@@ -1,6 +1,6 @@
-import src.main.python.common.constants as const
-from src.main.python.common.common_functions import log_return, rolling_correlation
-from src.main.python.SimpleStockDataPlot import extract_data
+import common.constants as const
+from common.common_functions import log_return, rolling_correlation
+from SimpleStockDataPlot import extract_data
 import pandas as pd
 import datetime as dt
 from urllib.request import urlretrieve

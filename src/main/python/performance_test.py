@@ -1,4 +1,4 @@
-from src.main.python.common.timeit import timeit
+from common.timeit import timeit
 import numexpr as ne
 import numpy as np
 import math
