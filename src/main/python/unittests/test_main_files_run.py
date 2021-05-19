@@ -12,6 +12,8 @@ class MainFilesRun(unittest.TestCase):
         benchmark_index_ticker = '^DJI'
         backtesting(benchmark_index_ticker, 50, start_date='2000-01-01')
 
+        self.assertTrue(True)
+
     def test_black_scholes_merton(self):
         """ Tests successful run of black_scholes_merton.py and BSM_MonteCarlo.py """
         from black_scholes_merton import BSM_pricing_value
