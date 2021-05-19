@@ -6,12 +6,12 @@ import datetime as dt
 
 class MainFilesRun(unittest.TestCase):
 
-    # def test_backtesting(self):
-    #     """ Tests successful run of backtesting.py """
-    #     from backtesting import backtesting
-    #
-    #     benchmark_index_ticker = '^DJI'
-    #     backtesting(benchmark_index_ticker, 50, start_date='2021-01-01')
+    def test_backtesting(self):
+        """ Tests successful run of backtesting.py """
+        from backtesting import backtesting
+
+        benchmark_index_ticker = '^DJI'
+        backtesting(benchmark_index_ticker, 50, start_date='2021-01-01')
 
     def test_black_scholes_merton(self):
         """ Tests successful run of black_scholes_merton.py and BSM_MonteCarlo.py """
@@ -36,7 +36,7 @@ class MainFilesRun(unittest.TestCase):
         ls_tickers = ['AAL', 'AA', 'AAPL', 'BBY', 'C', 'CVS', 'HD', 'IBM']
 
         # Get 10 years worth of historical data
-        start_date = (dt.datetime.today() - relativedelta(years=10)).strftime('%Y-%m-%d')
+        start_date = (dt.datetime.today() - relativedelta(years=5)).strftime('%Y-%m-%d')
         end_date = dt.datetime.today().strftime('%Y-%m-%d')
         plot_corr_mat(ls_tickers, start_date, end_date, res_path=False)
 
@@ -48,18 +48,18 @@ class MainFilesRun(unittest.TestCase):
         x = SimpleRegression('^STOXX50E', '1999-01-01')
         x()
 
-    # def test_simple_stock_data_plot(self):
-    #     """ Tests successful run of SimpleStockDataPlot.py """
-    #
-    #     from SimpleStockDataPlot import plot_bar_volume, PlotStockData, extract_data
-    #
-    #     ticker = 'AAPL'
-    #     start_date = '2020-03-01'
-    #     end_date = '2021-03-01'
-    #
-    #     plot_bar_volume(ticker, start_date, end_date)
-    #
-    #     stock_data = PlotStockData(ticker, start_date, end_date)
-    #     stock_data()
-    #
-    #     df = extract_data(ticker, start_date, end_date)
+    def test_simple_stock_data_plot(self):
+        """ Tests successful run of SimpleStockDataPlot.py """
+
+        from SimpleStockDataPlot import plot_bar_volume, PlotStockData, extract_data
+
+        ticker = 'AAPL'
+        start_date = '2020-03-01'
+        end_date = '2021-03-01'
+
+        plot_bar_volume(ticker, start_date, end_date)
+
+        stock_data = PlotStockData(ticker, start_date, end_date)
+        stock_data()
+
+        df = extract_data(ticker, start_date, end_date)
