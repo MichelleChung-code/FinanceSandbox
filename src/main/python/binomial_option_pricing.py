@@ -2,7 +2,6 @@ import numpy as np
 import math
 from common.timeit import timeit
 
-#todo add comments and doc strings
 
 class BinomialOptionPricing:
     def __init__(self, S_0, maturity, short_rate, vol_factor, strike_price, time_steps):
@@ -34,7 +33,9 @@ class BinomialOptionPricing:
         val = np.maximum(S - self.strike_price, 0)
         i = 0
 
+        # only care about the upper triangular matrix portion
         for t in range(self.time_steps - 1, -1, -1):  # backwards loop to discount expected inner values
+            # for column t - discount from t+1 column, only computing for the upper triangular portion (rows calcs of below val slicing)
             val[0:self.time_steps - i, t] = (risk_neutral_prob * val[0:self.time_steps - i, t + 1] + (
                     1 - risk_neutral_prob)
                                              * val[1:self.time_steps - i + 1, t + 1]) * delta_discount_rate
