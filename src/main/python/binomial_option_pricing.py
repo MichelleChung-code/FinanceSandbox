@@ -4,6 +4,8 @@ from common.timeit import timeit
 
 
 class BinomialOptionPricing:
+    """ Class to calculate the present value of a call option via the binomial pricing method """
+
     def __init__(self, S_0, maturity, short_rate, vol_factor, strike_price, time_steps):
         # for call option
         self.S_0 = S_0  # initial index level
