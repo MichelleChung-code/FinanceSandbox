@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import pickle
 import os
 from pathlib import Path
+from nltk.corpus import stopwords
+
+
+# nltk.download('stopwords')
 
 
 def log_return(df, col_name):
@@ -122,8 +126,35 @@ def read_from_disk(input_pkl_path):
     return data
 
 
+def clean_text(path_to_text_file, additional_stopwords_ls=False):
+    """
+    Initial cleaning of text data
+
+    Args:
+        path_to_text_file: <str> .txt path to corpus file
+        additional_stopwords_ls: <list> optional parameter to include custom list on top of common stop words from nltk
+        stop words
+
+    Returns:
+        <list> of cleaned words
+    """
+    assert path_to_text_file.endswith('.txt')
+    with open(path_to_text_file) as file:
+        file_text = file.read()
+
+    words = file_text.split()
+    lower_case_alphabetic_only = [word.lower() for word in words if
+                                  word.isalpha()]  # consistent case, convert everything to lowercase if isalpha()
+
+    stopwords_nltk = list(set(stopwords.words('english')))  # stop words for the english language
+    if additional_stopwords_ls:
+        stopwords_nltk = stopwords_nltk + additional_stopwords_ls
+
+    return [word for word in lower_case_alphabetic_only if word not in stopwords_nltk]
+
 
 if __name__ == '__main__':
+    pass
     # from SimpleStockDataPlot import extract_data
     #
     # ticker = '^GDAXI'
@@ -139,10 +170,10 @@ if __name__ == '__main__':
     # df[[const.CLOSE, std_col_name, ret_col_name]].plot(subplots=True)
     # plt.show()
 
-    import random
-
-    data = [random.gauss(1.5, 2) for i in range(1000000)]
-    res_path = os.path.join(str(Path(__file__).parents[1]), 'data', 'data.pkl')
-
-    write_to_disk(data, res_path)
-    print(read_from_disk(res_path))
+    # import random
+    #
+    # data = [random.gauss(1.5, 2) for i in range(1000000)]
+    # res_path = os.path.join(str(Path(__file__).parents[1]), 'data', 'data.pkl')
+    #
+    # write_to_disk(data, res_path)
+    # print(read_from_disk(res_path))
