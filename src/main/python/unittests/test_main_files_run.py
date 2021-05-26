@@ -63,3 +63,9 @@ class MainFilesRun(unittest.TestCase):
         stock_data()
 
         df = extract_data(ticker, start_date, end_date)
+
+    def test_sentiment_analysis(self):
+        from sentiment_analysis import estimate_sentiment
+
+        df = estimate_sentiment(
+            r'C:\Users\tkdmc\Documents\GitHub\personal_python\investment_analysis_with_nlp\S5 - Estimating Firm Level Sentiment\mda')
