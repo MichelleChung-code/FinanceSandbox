@@ -65,7 +65,14 @@ class MainFilesRun(unittest.TestCase):
         df = extract_data(ticker, start_date, end_date)
 
     def test_sentiment_analysis(self):
-        from sentiment_analysis import estimate_sentiment
+        from sentiment_analysis import estimate_sentiment, estimate_sentiment_using_DTM
+        import pandas as pd
 
-        df = estimate_sentiment(
+        estimate_sentiment(
             r'C:\Users\tkdmc\Documents\GitHub\personal_python\investment_analysis_with_nlp\S5 - Estimating Firm Level Sentiment\mda')
+
+        df = pd.read_csv(
+            r"C:\Users\tkdmc\Documents\GitHub\personal_python\investment_analysis_with_nlp\S5 - Estimating Firm Level Sentiment\mda_data.csv",
+            index_col=0)
+
+        estimate_sentiment_using_DTM(df, raw_text_col_name='raw_text')

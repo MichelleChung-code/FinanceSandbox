@@ -126,21 +126,28 @@ def read_from_disk(input_pkl_path):
     return data
 
 
-def clean_text(path_to_text_file, additional_stopwords_ls=False):
+def clean_text(input_text, additional_stopwords_ls=False, text_str=False):
     """
     Initial cleaning of text data
 
     Args:
-        path_to_text_file: <str> .txt path to corpus file
+        input_text: <str> .txt path to corpus file or text string to clean
         additional_stopwords_ls: <list> optional parameter to include custom list on top of common stop words from nltk
         stop words
+        text_str: <bool> defaults as False, whether input_text is a text string or a path to a text file.  Default is
+        that it is a path to a file
 
     Returns:
         <list> of cleaned words
     """
-    assert path_to_text_file.endswith('.txt')
-    with open(path_to_text_file) as file:
-        file_text = file.read()
+    assert isinstance(text_str, bool)
+
+    if not text_str:
+        assert input_text.endswith('.txt')
+        with open(input_text) as file:
+            file_text = file.read()
+    else:
+        file_text = input_text
 
     words = file_text.split()
     lower_case_alphabetic_only = [word.lower() for word in words if
