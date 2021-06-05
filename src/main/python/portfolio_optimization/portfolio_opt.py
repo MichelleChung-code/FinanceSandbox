@@ -58,7 +58,6 @@ class MarkowitzOptimizePortfolio:
         # set up the optimization variables
         # long only portfolio
         w = cp.Variable(self.n)  # weight vector to solve for
-        # gamma = cp.Parameter(nonneg=True)
         portfolio_ret = self.mu.T @ w
         portfolio_variance = cp.quad_form(w, self.sigma)  # cp.quad form is the same as w.T @ self.sigma @ w
 
