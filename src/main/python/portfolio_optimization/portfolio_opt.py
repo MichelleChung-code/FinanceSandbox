@@ -20,9 +20,12 @@ class MarkowitzOptimizePortfolio:
         self.n = num_assets
         self.mu = mu
         self.sigma = sigma
-
-        assert gamma >= 0
         self.gamma = gamma
+
+        # quick checks on dimensions
+        assert self.gamma >= 0
+        assert len(self.mu) == self.n
+        assert self.sigma.shape == (self.n, self.n)
 
     def get_objective_function(self, portfolio_ret, portfolio_variance):
         """
