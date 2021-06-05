@@ -14,6 +14,10 @@ GAMMA_DATA = 'gamma_data'
 class RiskCurve(MarkowitzOptimizePortfolio):
 
     def __init__(self, num_samples=10000, *args, **kwargs):
+        """
+        Args:
+            num_samples: <int> number of times to run the optimization problem with varying gamma values
+        """
         super().__init__(*args, **kwargs)
 
         # overwrite gamma
@@ -21,6 +25,22 @@ class RiskCurve(MarkowitzOptimizePortfolio):
         self.num_samples = num_samples
 
     def compute_risk_curve_values(self, problem, portfolio_ret, portfolio_variance):
+        """
+        Loop through varying gamma values to produce optimization results
+
+        Args:
+            problem: <cvxpy Problem> with objective and constraints already set up
+            portfolio_ret: <cvxpy Expression> computing portfolio returns
+            portfolio_variance: <cvxpy Expression> computing portfolio variance
+
+        Returns:
+            <dict> of portfolio optimization results:
+                <list> calculated variances
+                <list> calculated returns
+                <list> cvxpy optimization statuses per run
+                <list> of gamma values (produced using base 10 logspace (base**start, base**stop) between
+                start: -2 and stop: 2
+        """
 
         # initialize the sizes of result arrays
         variance_data_ls = np.zeros(self.num_samples)
@@ -45,6 +65,12 @@ class RiskCurve(MarkowitzOptimizePortfolio):
                 GAMMA_DATA: gamma}
 
     def plot_risk_curve(self, optimization_results):
+        """
+        Plots the risk curve
+
+        Args:
+            optimization_results: <dict> from the output of the compute_risk_curve_values() function
+        """
         fig = plt.figure()
         ax = fig.add_subplot(111)
         plt.plot(optimization_results[VAR_DATA], optimization_results[RET_DATA])
