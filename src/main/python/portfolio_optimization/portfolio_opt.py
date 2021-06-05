@@ -72,18 +72,3 @@ class MarkowitzOptimizePortfolio:
                 'portfolio_ret': portfolio_ret.value,
                 'portfolio_variance': portfolio_variance.value,
                 'status': problem.status}
-
-
-if __name__ == '__main__':
-    np.random.seed(1)
-    n = 10
-
-    # todo use actual data from yahoo finance
-    mu = np.abs(np.random.randn(n, 1))
-    sigma = np.random.randn(n, n)
-    sigma = sigma.T.dot(sigma)
-
-    x = MarkowitzOptimizePortfolio(num_assets=n, mu=mu, sigma=sigma)
-    results = x()
-
-    pprint.pprint(results)

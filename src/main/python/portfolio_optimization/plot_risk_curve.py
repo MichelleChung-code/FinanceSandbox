@@ -3,6 +3,12 @@ import pprint
 import numpy as np
 import cvxpy as cp
 import matplotlib.pyplot as plt
+import math
+
+VAR_DATA = 'variance_data'
+RET_DATA = 'return_data'
+OPT_STATUS_DATA = 'opt_status_data'
+GAMMA_DATA = 'gamma_data'
 
 
 class RiskCurve(MarkowitzOptimizePortfolio):
@@ -33,9 +39,28 @@ class RiskCurve(MarkowitzOptimizePortfolio):
         if all(x for x in opt_status_ls if x == cp.OPTIMAL):
             print('All problems solved as {}'.format(cp.OPTIMAL))
 
-        return {'variance_data': variance_data_ls,
-                'return_data': return_data_ls,
-                'opt_status_data': opt_status_ls}
+        return {VAR_DATA: variance_data_ls,
+                RET_DATA: return_data_ls,
+                OPT_STATUS_DATA: opt_status_ls,
+                GAMMA_DATA: gamma}
+
+    def plot_risk_curve(self, optimization_results):
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        plt.plot(optimization_results[VAR_DATA], optimization_results[RET_DATA])
+
+        # show a couple gamma values
+        marker_pos = math.floor(self.num_samples / 3)
+        marker_pos_ls = [marker_pos, self.num_samples - marker_pos]
+        for marker_position in marker_pos_ls:
+            plt.plot(optimization_results[VAR_DATA][marker_position], optimization_results[RET_DATA][marker_position],
+                     'bs')
+            ax.annotate('gamma = {:.2f}'.format(optimization_results[GAMMA_DATA][marker_position]), xy=(
+                optimization_results[VAR_DATA][marker_position], optimization_results[RET_DATA][marker_position]))
+
+        plt.xlabel('Portfolio Variance')
+        plt.ylabel('Portfolio Return')
+        plt.show()
 
     def __call__(self, *args, **kwargs):
         # set up the optimization variables
@@ -51,6 +76,7 @@ class RiskCurve(MarkowitzOptimizePortfolio):
         problem = cp.Problem(obj_func, constraints)
         res_dict = self.compute_risk_curve_values(problem, portfolio_ret, portfolio_variance)
 
+        self.plot_risk_curve(res_dict)
         return res_dict
 
 
