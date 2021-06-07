@@ -17,7 +17,7 @@ class PortfolioOptTest(unittest.TestCase):
         sigma = np.random.randn(n, n)
         sigma = sigma.T.dot(sigma)
 
-        x = MarkowitzOptimizePortfolio(num_assets=n, mu=mu, sigma=sigma)
+        x = MarkowitzOptimizePortfolio(num_assets=n, mu=mu, sigma=sigma, constraints=['sum_to_one', 'long_only'])
         results_dict = x()
 
         self.assertEqual(results_dict['status'], cp.OPTIMAL)

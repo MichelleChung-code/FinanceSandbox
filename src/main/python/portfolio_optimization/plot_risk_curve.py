@@ -97,7 +97,7 @@ class RiskCurve(MarkowitzOptimizePortfolio):
 
         # set up and solve the optimization problem
         obj_func = self.get_objective_function(portfolio_ret, portfolio_variance)
-        constraints = self.get_contraints(w)
+        constraints = self.get_contraints(w, self.constrs_ls)
 
         problem = cp.Problem(obj_func, constraints)
         res_dict = self.compute_risk_curve_values(problem, portfolio_ret, portfolio_variance)
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     sigma = np.random.randn(n, n)
     sigma = sigma.T.dot(sigma)
 
-    x = RiskCurve(num_assets=n, mu=mu, sigma=sigma)
+    x = RiskCurve(num_assets=n, mu=mu, sigma=sigma, constraints=['long_only', 'sum_to_one'])
     results = x()
 
     pprint.pprint(results)
