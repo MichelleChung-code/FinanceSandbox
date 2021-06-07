@@ -7,17 +7,20 @@ import cvxpy as cp
 
 class PortfolioOptTest(unittest.TestCase):
 
-    def test_results(self):
+    def setUp(self):
+        np.random.seed(1)
+
+        self.n = 10
+
+        self.mu = np.abs(np.random.randn(self.n, 1))
+        self.sigma = np.random.randn(self.n, self.n)
+        self.sigma = self.sigma.T.dot(self.sigma)
+
+    def test_long_only(self):
         """ Tests expected results from the optimization """
 
-        np.random.seed(1)
-        n = 10
-
-        mu = np.abs(np.random.randn(n, 1))
-        sigma = np.random.randn(n, n)
-        sigma = sigma.T.dot(sigma)
-
-        x = MarkowitzOptimizePortfolio(num_assets=n, mu=mu, sigma=sigma, constraints=['sum_to_one', 'long_only'])
+        x = MarkowitzOptimizePortfolio(num_assets=self.n, mu=self.mu, sigma=self.sigma,
+                                       constraints=['sum_to_one', 'long_only'])
         results_dict = x()
 
         self.assertEqual(results_dict['status'], cp.OPTIMAL)
@@ -27,3 +30,18 @@ class PortfolioOptTest(unittest.TestCase):
             np.allclose(results_dict['w'], [-1.79067574e-28, -1.78626150e-28, -1.78590713e-28, -1.78826447e-28,
                                             -1.78737084e-28, 1.00000000e+00, -1.79119959e-28, -1.78690862e-28,
                                             -1.78499809e-28, -1.78468995e-28]))
+
+    def test_leverage_limit(self):
+        """ Tests expected results from the optimization """
+
+        x = MarkowitzOptimizePortfolio(num_assets=self.n, mu=self.mu, sigma=self.sigma,
+                                       constraints=['sum_to_one', 'leverage_limit'])
+        results_dict = x()
+
+        self.assertEqual(results_dict['status'], cp.OPTIMAL)
+        self.assertTrue(np.allclose(results_dict['portfolio_ret'], [2.30156091]))
+        self.assertTrue(np.allclose(results_dict['portfolio_variance'], 6.571354165718808))
+        self.assertTrue(
+            np.allclose(results_dict['w'], [-1.71642509e-06, -1.71642509e-06, -1.71642509e-06, -1.71642509e-06,
+                                            -1.71642509e-06, 1.00001545e+00, -1.71642509e-06, -1.71642509e-06,
+                                            -1.71642509e-06, -1.71642509e-06]))

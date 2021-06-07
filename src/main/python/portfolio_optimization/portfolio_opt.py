@@ -60,7 +60,7 @@ class MarkowitzOptimizePortfolio:
 
         dict_constraints = {'sum_to_one': cp.sum(w) == 1,
                             'long_only': w >= 0,
-                            'leverage_limit': cp.norm(w, 1) == lev_lim}
+                            'leverage_limit': cp.norm(w, 1) <= lev_lim}
 
         if not set(constr_ls).issubset(dict_constraints.keys()):
             missing_items = set(constr_ls) - set(dict_constraints.keys())
