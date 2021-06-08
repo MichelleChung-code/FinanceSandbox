@@ -10,6 +10,7 @@ RET_DATA = 'return_data'
 OPT_STATUS_DATA = 'opt_status_data'
 GAMMA_DATA = 'gamma_data'
 
+# todo accomodate other constraints.  Right now it is for long only
 
 class RiskCurve(MarkowitzOptimizePortfolio):
 
