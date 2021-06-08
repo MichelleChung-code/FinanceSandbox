@@ -17,6 +17,14 @@ class MarkowitzOptimizePortfolio:
             mu: vector containing the mean returns of the assets
             sigma: covariance matrix
             gamma: risk adversion parameter - higher the number, the more risk adverse
+            constraints: <list> of string elements for constraints to apply
+            lev_limit: <int> or <float> to represent how much to allow to leverage
+            factor_covariance: <bool> if True, run as factor covariance model.  Additionally params required.
+
+            For factor_covariance == True:
+                D: <scipy matrix> diagonal matrix  for idiosyncratic risk
+                F: <np.ndarray> of factor loadings of shape: num_assets x num_factors
+                num_factors: <int> number of factors
         """
 
         self.n = num_assets
@@ -65,6 +73,8 @@ class MarkowitzOptimizePortfolio:
             w: <cvxpy variable> weight vector variable
             constr_ls: <list> of constraints to apply
             lev_lim: <int> or <float> max leverage allowed
+            f: <cp.Variable> for factor exposures vector.  If False, model is not factor covariance one
+            F: <np.ndarray> of factor loadings per asset.  Shape: num_assets x num_factors
 
         Returns:
             <list> of contraints
@@ -87,7 +97,7 @@ class MarkowitzOptimizePortfolio:
             if any([isinstance(x, bool) for x in [f, F]]):
                 raise Exception(
                     'Factor Exposures CVXPY variable and factor loadings must be provided for factor covariance model')
-            model_constraints = model_constraints + [f == F.T@w]
+            model_constraints = model_constraints + [f == F.T @ w]
 
         return model_constraints
 
@@ -147,5 +157,3 @@ if __name__ == '__main__':
     results_dict = x()
 
     pprint.pprint(results_dict)
-
-
