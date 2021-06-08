@@ -135,25 +135,3 @@ class MarkowitzOptimizePortfolio:
             res_dict.update({'factor_exposures': f.value})
 
         return res_dict
-
-
-if __name__ == '__main__':
-    # factor covariance model
-    n_assets = 3000
-    m_factors = 50
-    np.random.seed(1)
-    mu = np.abs(np.random.randn(n_assets, 1))
-    factor_covar_matrix = np.random.randn(m_factors, m_factors)
-    factor_covar_matrix = factor_covar_matrix.T.dot(factor_covar_matrix)
-    D = sp.diags(np.random.uniform(0, 0.9, size=n_assets))  # idiosyncratic risk
-    factor_loading_matrix = np.random.randn(n_assets, m_factors)
-
-    gamma = 0.1
-    lev_lim = 2
-
-    x = MarkowitzOptimizePortfolio(num_assets=n_assets, num_factors=m_factors, mu=mu, sigma=factor_covar_matrix,
-                                   constraints=['sum_to_one', 'leverage_limit'], D=D, F=factor_loading_matrix,
-                                   factor_covariance=True, gamma=gamma, lev_limit=lev_lim)
-    results_dict = x()
-
-    pprint.pprint(results_dict)
