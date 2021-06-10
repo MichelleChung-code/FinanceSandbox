@@ -7,9 +7,6 @@ from pathlib import Path
 from nltk.corpus import stopwords
 
 
-# nltk.download('stopwords')
-
-
 def log_return(df, col_name):
     """
     Compute the log returns

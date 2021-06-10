@@ -8,6 +8,7 @@ VOLUME = 'Volume'
 ADJ_CLOSE = 'Adj Close'
 TICKER = 'Ticker'
 
+DATE_STR_FORMAT = '%Y-%m-%d'
 
 DATE = 'Date'
 
