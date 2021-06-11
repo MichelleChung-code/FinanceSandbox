@@ -2,6 +2,7 @@ import numpy as np
 import cvxpy as cp
 import pprint
 import scipy.sparse as sp
+from portfolio_optimization.portfolio_opt_preprocess import PortfolioOptPreprocess
 
 
 # Atomic functions documentation: https://www.cvxpy.org/tutorial/functions/index.html
@@ -135,3 +136,16 @@ class MarkowitzOptimizePortfolio:
             res_dict.update({'factor_exposures': f.value})
 
         return res_dict
+
+
+if __name__ == '__main__':
+    ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
+
+    preprocess = PortfolioOptPreprocess(ls_assets, rets_hist_length_yrs=3)
+    preprocess_res = preprocess()
+    x = MarkowitzOptimizePortfolio(num_assets=preprocess.n, mu=preprocess_res['expected_returns'],
+                                   sigma=preprocess_res['covariance_matrix'],
+                                   constraints=['sum_to_one', 'long_only'])
+    results_dict = x()
+
+    print(results_dict)
