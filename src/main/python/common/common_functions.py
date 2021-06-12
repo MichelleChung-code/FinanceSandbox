@@ -5,6 +5,36 @@ import pickle
 import os
 from pathlib import Path
 from nltk.corpus import stopwords
+from dateutil.relativedelta import relativedelta
+import pandas as pd
+from SimpleStockDataPlot import extract_data
+
+
+def get_price_data(ticker_ls, end_date, look_back_mths):
+    """
+    Return a dataframe of daily price data (adjusted close price), sourced from Yahoo Finance
+
+    Args:
+        ticker_ls: <list> of tickers
+        end_date: <dt.datetime> of end date to apply look back months to
+        look_back_mths: <int> number of months from end date to define the starting date to pull data from
+
+    Returns:
+        <pd.DataFrame> containing the price data
+    """
+    start_date = (end_date - relativedelta(months=look_back_mths))
+    df_price_data = pd.DataFrame(
+        index=pd.date_range(start=start_date.strftime(const.DATE_STR_FORMAT),
+                            end=end_date.strftime(const.DATE_STR_FORMAT), freq='B'),
+        columns=ticker_ls)
+
+    for asset in ticker_ls:
+        df_price_data[asset] = extract_data(asset, start_date.strftime(const.DATE_STR_FORMAT),
+                                            end_date.strftime(const.DATE_STR_FORMAT))[const.ADJ_CLOSE]
+
+    df_price_data.fillna(method='ffill', inplace=True)
+
+    return df_price_data
 
 
 def log_return(df, col_name):
