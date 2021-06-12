@@ -4,11 +4,13 @@ import numpy as np
 import cvxpy as cp
 import matplotlib.pyplot as plt
 import math
+from portfolio_optimization.portfolio_opt_preprocess import PortfolioOptPreprocess
 
 VAR_DATA = 'variance_data'
 RET_DATA = 'return_data'
 OPT_STATUS_DATA = 'opt_status_data'
 GAMMA_DATA = 'gamma_data'
+
 
 # todo accomodate other constraints.  Right now it is for long only
 
@@ -108,15 +110,13 @@ class RiskCurve(MarkowitzOptimizePortfolio):
 
 
 if __name__ == '__main__':
-    np.random.seed(1)
-    n = 10
+    ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
 
-    # todo use actual data from yahoo finance
-    mu = np.abs(np.random.randn(n, 1))
-    sigma = np.random.randn(n, n)
-    sigma = sigma.T.dot(sigma)
+    preprocess = PortfolioOptPreprocess(ls_assets, rets_hist_length_yrs=3)
+    preprocess_res = preprocess()
+    x = RiskCurve(num_assets=preprocess.n, mu=preprocess_res['expected_returns'],
+                  sigma=preprocess_res['covariance_matrix'],
+                  constraints=['sum_to_one', 'long_only'])
+    results_dict = x()
 
-    x = RiskCurve(num_assets=n, mu=mu, sigma=sigma, constraints=['long_only', 'sum_to_one'])
-    results = x()
-
-    pprint.pprint(results)
+    pprint.pprint(results_dict)
