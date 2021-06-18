@@ -51,8 +51,10 @@ def active_return_and_risk(df_port_rets, df_benchmark_rets):
 
     df_active_return = df_port_rets.subtract(df_benchmark_rets)
 
+    # we define tracking error to be the same as active risk
+
     return {col[0]: df_active_return,
-            'active_risk': df_active_return.std()[0]}
+            'active_risk_tracking_error': df_active_return.std()[0]}
 
 
 def get_price_data(ticker_ls, end_date, look_back_mths):
