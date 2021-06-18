@@ -8,6 +8,25 @@ from nltk.corpus import stopwords
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 from SimpleStockDataPlot import extract_data
+import datetime as dt
+
+
+def portfolio_return(df_rets, w):
+    """
+    Return a series of portfolio returns
+
+    Args:
+        df_rets: <pd.DataFrame> of individual asset returns.  Columns are asset names, index is dates
+        w: <np.ndarray> of shape len(df_rets.columns), 1
+
+    Returns:
+        <pd.DataFrame> of len(df_rets), 1 of portfolio returns
+    """
+    assert sum(w) == 1
+    df = df_rets.dot(w)
+    df.columns = ['port_rets']
+
+    return df
 
 
 def get_price_data(ticker_ls, end_date, look_back_mths):
@@ -188,7 +207,14 @@ def clean_text(input_text, additional_stopwords_ls=False, text_str=False):
 
 
 if __name__ == '__main__':
-    pass
+    ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
+    df_rets = get_price_data(ls_assets, end_date=dt.datetime.today(), look_back_mths=24).pct_change().fillna(0)
+
+    w = np.random.rand(len(ls_assets), 1)
+    w = w / sum(w)
+
+    print(portfolio_return(df_rets, w))
+
     # from SimpleStockDataPlot import extract_data
     #
     # ticker = '^GDAXI'
