@@ -10,6 +10,8 @@ import pandas as pd
 from SimpleStockDataPlot import extract_data
 import datetime as dt
 
+TOL = 1e-10
+
 
 def portfolio_return(df_rets, w):
     """
@@ -22,11 +24,35 @@ def portfolio_return(df_rets, w):
     Returns:
         <pd.DataFrame> of len(df_rets), 1 of portfolio returns
     """
-    assert sum(w) == 1
+    assert abs(sum(w) - 1) <= TOL
     df = df_rets.dot(w)
     df.columns = ['port_rets']
 
     return df
+
+
+def active_return_and_risk(df_port_rets, df_benchmark_rets):
+    """
+    Compute and return active returns and risk
+
+    r_a = r_p - r_b
+    sigma_a = std(r_a)
+
+    Args:
+        df_port_rets: <pd.DataFrame> containing portfolio returns
+        df_benchmark_rets: <pd.DataFrame> containing benchmark returns
+
+    Returns:
+        <dict> containing <pd.DataFrame> and <float> of active return series and the active risk number
+    """
+    assert len(df_port_rets.columns) == 1 and len(df_benchmark_rets.columns) == 1
+    col = ['active_return']
+    df_port_rets.columns, df_benchmark_rets.columns = col, col
+
+    df_active_return = df_port_rets.subtract(df_benchmark_rets)
+
+    return {col[0]: df_active_return,
+            'active_risk': df_active_return.std()[0]}
 
 
 def get_price_data(ticker_ls, end_date, look_back_mths):
@@ -208,12 +234,17 @@ def clean_text(input_text, additional_stopwords_ls=False, text_str=False):
 
 if __name__ == '__main__':
     ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
-    df_rets = get_price_data(ls_assets, end_date=dt.datetime.today(), look_back_mths=24).pct_change().fillna(0)
+    df_rets = get_price_data(ls_assets, end_date=dt.datetime.today(), look_back_mths=12).pct_change().fillna(0)
 
     w = np.random.rand(len(ls_assets), 1)
     w = w / sum(w)
 
-    print(portfolio_return(df_rets, w))
+    df_port_rets = portfolio_return(df_rets, w)
+
+    df_benchmark_rets = get_price_data(['^GSPC'], end_date=dt.datetime.today(), look_back_mths=12).pct_change().fillna(
+        0)
+
+    print(active_return_and_risk(df_port_rets, df_benchmark_rets))
 
     # from SimpleStockDataPlot import extract_data
     #
