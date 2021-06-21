@@ -49,6 +49,27 @@ def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.02):
     return rf_rate_daily + beta * (df_market_rets - rf_rate_daily) - df_rets
 
 
+def residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_over_benchmark):
+    """
+    Calculate the residual return of an investment over a benchmark.  This is the return independent of a benchmark.
+
+    Args:
+        stock_excess_rets: <pd.DataFrame> of the investment's excess returns
+        benchmark_excess_rets: <pd.DataFrame> of the benchmark's excess returns
+        beta_stock_over_benchmark: <float> beta value of the stock relative to this benchmark
+
+    Returns:
+        <dict> of the residual return series and risk of types <pd.DataFrame> and <float>
+    """
+    assert benchmark_excess_rets.columns == ['excess_return'] and stock_excess_rets.columns == ['excess_return']
+
+    # Residual return = Excess return - (Benchmark's excess return * beta).
+    df = stock_excess_rets - (benchmark_excess_rets * beta_stock_over_benchmark)
+    df.columns = ['residual_return']
+    return {'residual_return': df,
+            'residual_risk': df.std()}
+
+
 if __name__ == '__main__':
     # Apple
     df_stock_rets = get_price_data(['AAPL'], end_date=dt.datetime.today(), look_back_mths=12).pct_change().fillna(0)
@@ -68,3 +89,6 @@ if __name__ == '__main__':
 
     stock_excess_rets = excess_return_daily(df_stock_rets, df_market_rets, beta_stock)
     benchmark_excess_rets = excess_return_daily(df_benchmark_rets, df_market_rets, beta_benchmark)
+
+    # residual returns of the stock over the benchmark
+    print(residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_over_benchmark))
