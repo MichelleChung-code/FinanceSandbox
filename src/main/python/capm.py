@@ -59,7 +59,8 @@ def residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_ov
         beta_stock_over_benchmark: <float> beta value of the stock relative to this benchmark
 
     Returns:
-        <dict> of the residual return series and risk of types <pd.DataFrame> and <float>
+        <dict> of the residual return series, residual risk, and expected residual return of types:
+        <pd.DataFrame>, <float>, and <float>; respectively
     """
     assert benchmark_excess_rets.columns == ['excess_return'] and stock_excess_rets.columns == ['excess_return']
 
@@ -67,7 +68,8 @@ def residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_ov
     df = stock_excess_rets - (benchmark_excess_rets * beta_stock_over_benchmark)
     df.columns = ['residual_return']
     return {'residual_return': df,
-            'residual_risk': df.std()}
+            'residual_risk': df.std(),
+            'expected_residual_return': df.mean()}
 
 
 if __name__ == '__main__':
