@@ -51,7 +51,7 @@ def gaussian_VaR(ret_df):
     return ret_df.mean() + z_score * ret_df.std()
 
 
-def maximum_drawdowns(df_price_data, window_days=const.NUM_TRADE_DAYS_PER_YR):
+def rolling_maximum_drawdowns(df_price_data, window_days=const.NUM_TRADE_DAYS_PER_YR):
     """
     Compute rolling maximum drawdowns from daily price data
 
@@ -77,6 +77,24 @@ def maximum_drawdowns(df_price_data, window_days=const.NUM_TRADE_DAYS_PER_YR):
     return max_drawdowns, max_drawdowns.min()
 
 
+def maximum_drawdown(df_price_data):
+    """
+    Get the maximum drawdown from all given price data
+
+    Args:
+        df_price_data: <pd.DataFrame> for an individual stock's price history
+
+    Returns:
+        <pd.Series> containing the maximum drawdown experienced during the given price data history
+    """
+    max_peaks = df_price_data.cummax()
+    daily_drawdowns = (df_price_data - max_peaks) / max_peaks
+    max_drawdown = daily_drawdowns.cummin()
+
+    # return the last element since this would be the cumulative minimum
+    return max_drawdown.iloc[-1]
+
+
 if __name__ == '__main__':
     ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
     df = get_price_data(ls_assets, end_date=dt.datetime.today(), look_back_mths=24).pct_change().fillna(0)
@@ -86,4 +104,5 @@ if __name__ == '__main__':
     print(gaussian_VaR(df))
 
     df_price_data = get_price_data(['AAPL'], end_date=dt.datetime.today(), look_back_mths=48)
-    print(maximum_drawdowns(df_price_data=df_price_data))
+    print(rolling_maximum_drawdowns(df_price_data=df_price_data))
+    print(maximum_drawdown(df_price_data=df_price_data))
