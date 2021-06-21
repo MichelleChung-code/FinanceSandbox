@@ -13,6 +13,22 @@ import datetime as dt
 TOL = 1e-10
 
 
+def daily_risk_free_rate(days=30, tres_rate=0.05 / 100):
+    """
+    Use compounding interest formula to get the daily risk free rate from the yield to maturity (for a zero-coupon bond)
+
+    Args:
+        days: <int> number of days to compound by/ number of days the rate is for
+        tres_rate: <float> treasury rate
+
+    Returns:
+        <float> daily risk free rate
+
+    """
+    # Default uses https://ycharts.com/indicators/1_month_treasury_rate for the 1 month treasury rate as of Jun 18 2021
+    return ((tres_rate + 1) ** (1 / days)) - 1
+
+
 def portfolio_return(df_rets, w):
     """
     Return a series of portfolio returns

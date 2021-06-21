@@ -1,4 +1,4 @@
-from common.common_functions import get_price_data
+from common.common_functions import get_price_data, daily_risk_free_rate
 import datetime as dt
 
 
@@ -26,7 +26,7 @@ def calc_beta(df_stock_rets, df_benchmark):
     return covar / bench_var
 
 
-def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.02):
+def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.09/100):
     """
     Compute an investment's excess return over the market or another benchmark calculated under CAPM
 
@@ -34,13 +34,16 @@ def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.02):
         df_rets: <pd.DataFrame> of the returns of the stock to evaluate
         df_market_rets: <pd.DataFrame> of the market returns or could also be another benchmark
         beta: <float> the investment's beta value against df_market_rets
-        rf_rate_annual: <float> annual risk free rate
+        rf_rate_annual: <float> annual risk free rate, default is from https://ycharts.com/indicators/1_year_treasury_rate
+        for the 1 Year Treasury Rate as of Jun 18 2021
 
     Returns:
         <pd.DataFrame> of daily excess returns
     """
     # convert annual risk free rate to daily with the compounding interest formula
-    rf_rate_daily = ((1 + rf_rate_annual) ** (1 / 365)) - 1
+    # https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/interest-rates-frequently-asked-questions
+    # yields on treasury securities are based on actual day counts (365/366 year basis)
+    rf_rate_daily = daily_risk_free_rate(days=365, tres_rate=rf_rate_annual)
 
     # set up column name for output dataframe
     df_rets.columns, df_market_rets.columns = ['excess_return'], ['excess_return']
