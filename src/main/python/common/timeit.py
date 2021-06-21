@@ -1,8 +1,9 @@
 import time
-
+import functools
 # timeit decorator modified from: https://medium.com/pythonhive/python-decorator-to-measure-the-execution-time-of-methods-fa04cb6bb36d
 
 def timeit(method):
+    @functools.wraps(method)
     def timed(*args, **kw):
         ts = time.time()
         result = method(*args, **kw)

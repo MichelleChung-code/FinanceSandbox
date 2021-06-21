@@ -18,7 +18,7 @@ class CAPMFunctionsTest(unittest.TestCase):
 
     def test_beta(self):
         """ Check that calculating beta via linear regression and covar/var formula yields the same value """
-        beta_calc = capm.beta(self.df_stock_rets, self.df_benchmark_rets)
+        beta_calc = capm.calc_beta(self.df_stock_rets, self.df_benchmark_rets)
 
         # compare to calculating beta through a linear regression
         # r_i = alpha + beta * r_m
@@ -27,4 +27,4 @@ class CAPMFunctionsTest(unittest.TestCase):
         y = np.array(self.df_stock_rets)
 
         lin_model = LinearRegression().fit(x, y)
-        self.assertEqual(beta_calc, lin_model.coef_)
+        self.assertTrue(np.allclose(beta_calc, lin_model.coef_))
