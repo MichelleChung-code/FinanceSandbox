@@ -29,3 +29,8 @@ HOLD = 'HOLD'
 SIGNAL_VAL = 'signal_val'
 SIGNAL_NAME = 'signal_name'
 SIGNALS_DICT = {1: BUY, -1: SELL, 0: HOLD}
+
+RESIDUAL_RETURN = 'residual_return'
+RESIDUAL_RISK = 'residual_risk'
+EXP_RESIDUAL_RETURN = 'expected_residual_return'
+EXCESS_RETURN = 'excess_return'

@@ -1,5 +1,6 @@
 from common.common_functions import get_price_data, daily_risk_free_rate
 import datetime as dt
+import common.constants as const
 
 
 # Dealing all with daily data
@@ -26,7 +27,7 @@ def calc_beta(df_stock_rets, df_benchmark):
     return covar / bench_var
 
 
-def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.09/100):
+def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.09 / 100):
     """
     Compute an investment's excess return over the market or another benchmark calculated under CAPM
 
@@ -46,7 +47,7 @@ def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.09/100):
     rf_rate_daily = daily_risk_free_rate(days=365, tres_rate=rf_rate_annual)
 
     # set up column name for output dataframe
-    df_rets.columns, df_market_rets.columns = ['excess_return'], ['excess_return']
+    df_rets.columns, df_market_rets.columns = [const.EXCESS_RETURN], [const.EXCESS_RETURN]
 
     # Excess return = RF + β(MR – RF) – TR
     return rf_rate_daily + beta * (df_market_rets - rf_rate_daily) - df_rets
@@ -65,14 +66,14 @@ def residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_ov
         <dict> of the residual return series, residual risk, and expected residual return of types:
         <pd.DataFrame>, <float>, and <float>; respectively
     """
-    assert benchmark_excess_rets.columns == ['excess_return'] and stock_excess_rets.columns == ['excess_return']
+    assert benchmark_excess_rets.columns == [const.EXCESS_RETURN] and stock_excess_rets.columns == [const.EXCESS_RETURN]
 
     # Residual return = Excess return - (Benchmark's excess return * beta).
     df = stock_excess_rets - (benchmark_excess_rets * beta_stock_over_benchmark)
-    df.columns = ['residual_return']
-    return {'residual_return': df,
-            'residual_risk': df.std(),
-            'expected_residual_return': df.mean()}
+    df.columns = [const.RESIDUAL_RETURN]
+    return {const.RESIDUAL_RETURN: df,
+            const.RESIDUAL_RISK: df.std(),
+            const.EXP_RESIDUAL_RETURN: df.mean()}
 
 
 if __name__ == '__main__':
