@@ -3,6 +3,7 @@ from common.common_functions import get_price_data
 import datetime as dt
 import common.constants as const
 
+
 def information_ratio(expected_residual_return, residual_risk):
     """
     Calculates the IR given the expected residual return and residual risk
@@ -16,6 +17,27 @@ def information_ratio(expected_residual_return, residual_risk):
 
     """
     return expected_residual_return / residual_risk
+
+
+def optimal_residual_risk(info_ratio, risk_adversion):
+    """
+    Get the optimal level of residual risk which maximizes the value added.
+
+    Here:
+    VA[ω_p] = ω_p * IR - λ_r * ω_p^2
+
+    Therefore, the optimal ω_p to maximize VA[ω_p] would be:
+    ω_p = IR / (2 * λ_r)
+
+    Args:
+        info_ratio: <float> information ratio
+        risk_adversion: <float> risk adversion parameter
+
+    Returns:
+        <float> optimal level of residual risk
+
+    """
+    return info_ratio / (2 * risk_adversion)
 
 
 if __name__ == '__main__':
@@ -41,5 +63,7 @@ if __name__ == '__main__':
     # residual returns of the stock over the benchmark
     res_dict = residual_return_risk(stock_excess_rets, benchmark_excess_rets, beta_stock_over_benchmark)
 
-    print(information_ratio(expected_residual_return=res_dict[const.EXP_RESIDUAL_RETURN][0],
-                            residual_risk=res_dict[const.RESIDUAL_RISK][0]))
+    IR = information_ratio(expected_residual_return=res_dict[const.EXP_RESIDUAL_RETURN][0],
+                           residual_risk=res_dict[const.RESIDUAL_RISK][0])
+
+    print(optimal_residual_risk(info_ratio=IR, risk_adversion=0.15))
