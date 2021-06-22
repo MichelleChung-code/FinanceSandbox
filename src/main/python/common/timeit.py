@@ -4,9 +4,9 @@ import functools
 
 def timeit(method):
     @functools.wraps(method)
-    def timed(*args, **kw):
+    def timed(*args, **kwargs):
         ts = time.time()
-        result = method(*args, **kw)
+        result = method(*args, **kwargs)
         te = time.time()
 
         print('Time elapsed for %r function:  %2.2f ms' % (method.__name__, (te - ts) * 1000))
