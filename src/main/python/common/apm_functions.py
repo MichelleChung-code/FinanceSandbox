@@ -3,6 +3,7 @@ from common.common_functions import get_price_data
 import datetime as dt
 import common.constants as const
 import numpy as np
+from functools import reduce
 
 
 def information_ratio_br_ic(BR, IC):
@@ -48,6 +49,25 @@ def information_ratio(expected_residual_return, residual_risk):
 
     """
     return expected_residual_return / residual_risk
+
+
+def IR_additivity(ic_br_ls: list):
+    """
+    Compute the combined information ratio given a list of individual skill and breath information
+
+    IR^2 = (BR1*IC1^2) + (BR2*IC2^2) + etc.
+    Information ratios are additive in their squares
+
+    Args:
+        ic_br_ls: <list> of tuples containing IC and BR information e.g. [(IC_1, BR_1), (IC_2, BR_2)]
+
+    Returns:
+        <float> the combined information ratio
+
+    """
+    ls_indiv_ir_squared = [x[0] ** 2 * x[1] for x in ic_br_ls]
+    # IR is now the square root of the sum
+    return np.sqrt(reduce(lambda x, y: x + y, ls_indiv_ir_squared))
 
 
 def optimal_residual_risk(info_ratio, risk_adversion):
@@ -99,4 +119,7 @@ if __name__ == '__main__':
     #
     # print(optimal_residual_risk(info_ratio=IR, risk_adversion=0.15))
 
-    print(information_ratio_br_ic(BR=4, IC=0.25))
+    # print(information_ratio_br_ic(BR=4, IC=0.25))
+
+    # Each tuple is (IC, BR)
+    print(IR_additivity([(0.02, 12), (0.04, 24), (0.075, 100)]))
