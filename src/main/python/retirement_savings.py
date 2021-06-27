@@ -4,6 +4,19 @@ from sympy import Eq, Symbol, solve
 class RetirementSavings:
     def __init__(self, age, current_amount=0, retirement_age=60, average_annual_ret=0.04, inflation_rate=1.5 / 100,
                  required_amt_override=False):
+        """
+        Class to give an idea of the contribution amounts required to retire with a certain amount of money, assuming
+        an average annual rate of return for the contributions and current savings.
+
+        Args:
+            age: <int> current age
+            current_amount: <float> current amount invested/ in savings
+            retirement_age: <int> age to retire at
+            average_annual_ret: <float> decimal value for the annual return rate, conservatively defaults to 4%
+            inflation_rate: <float> decimal value for annual inflation rate, defaults to 1.5%
+            required_amt_override: <bool> or <float> if False then use default of 100k per year (100-retirement_age)
+            total required for retirement, if <float> then manually enter the total required to retire
+        """
         self.current_savings = current_amount
         self.contribution_years = retirement_age - age
         required_years = 100 - retirement_age  # assuming 100y life expectancy
@@ -15,6 +28,8 @@ class RetirementSavings:
     def __call__(self, *args, **kwargs):
         print(self)
         sol = self.calculate_annual_contributions()
+
+        # return the annual and monthly contribution amounts required
         return {'annual_contributions': sol,
                 'monthly_contributions': sol / 12}
 
