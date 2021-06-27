@@ -7,6 +7,8 @@ class RetirementSavings:
         self.contribution_years = retirement_age - age
         required_years = 100 - retirement_age  # assuming 100y life expectancy
         self.required_amount = 100000 * required_years
+
+        # adjust for inflation :(
         self.avg_yearly_return_inf_adjusted = ((1 + average_annual_ret) / (1 + inflation_rate)) - 1
 
     def __call__(self, *args, **kwargs):
@@ -22,12 +24,14 @@ class RetirementSavings:
         current_savings_compounded = self.current_savings * (
                 1 + self.avg_yearly_return_inf_adjusted) ** self.contribution_years
 
+        # assume that we contribute at the beginning of the month
         future_value_of_series_begin_mth = pmt * (
                 ((1 + self.avg_yearly_return_inf_adjusted) ** self.contribution_years - 1)
                 / self.avg_yearly_return_inf_adjusted) * (1 + self.avg_yearly_return_inf_adjusted)
 
         expr = current_savings_compounded + future_value_of_series_begin_mth
 
+        # solve for when the target amount is equal to the compounded value of current savings and payments
         eqn = Eq(expr, self.required_amount)
         return solve(eqn)[0]
 
