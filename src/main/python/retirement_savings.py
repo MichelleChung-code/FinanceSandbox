@@ -2,11 +2,12 @@ from sympy import Eq, Symbol, solve
 
 
 class RetirementSavings:
-    def __init__(self, age, current_amount=0, retirement_age=60, average_annual_ret=0.04, inflation_rate=1.5 / 100):
+    def __init__(self, age, current_amount=0, retirement_age=60, average_annual_ret=0.04, inflation_rate=1.5 / 100,
+                 required_amt_override=False):
         self.current_savings = current_amount
         self.contribution_years = retirement_age - age
         required_years = 100 - retirement_age  # assuming 100y life expectancy
-        self.required_amount = 100000 * required_years
+        self.required_amount = required_amt_override if required_amt_override else 100000 * required_years
 
         # adjust for inflation :(
         self.avg_yearly_return_inf_adjusted = ((1 + average_annual_ret) / (1 + inflation_rate)) - 1
