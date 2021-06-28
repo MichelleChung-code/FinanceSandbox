@@ -35,7 +35,7 @@ def write_to_table(conn, data, table_name):
         conn.execute(
             'INSERT INTO {table_name} VALUES({num_question_marks})'.format(table_name=table_name,
                                                                            num_question_marks=', '.join(
-                                                                               ['?' for i in range(len(row))])),
+                                                                               ['?' for i, _ in enumerate(row)])),
             tuple(i for i in row))
 
     conn.commit()
