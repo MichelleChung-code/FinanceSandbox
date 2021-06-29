@@ -45,7 +45,7 @@ def extract_data(ticker, start_date, end_date):
 
     Args:
         ticker: <str> stock ticker
-        start_date: <str> YYYY-MM-DD start date for data
+        start_date: <str> YYYY-MM-DD start date for data, if False - get all available history
         end_date: <str> YYYY-MM-DD end date for data
 
     Returns: <pd.DataFrame> containing data for 'High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close'
@@ -57,6 +57,10 @@ def extract_data(ticker, start_date, end_date):
         print('Data extracted for: {}'.format(name.info['longName']))
     except:
         print('No long name for {} available'.format(ticker))
+
+    if start_date == False: # get all available history
+        return data.DataReader(ticker, end=end_date, data_source='yahoo')
+
     return data.DataReader(ticker, start=start_date, end=end_date, data_source='yahoo')
 
 
