@@ -1,6 +1,10 @@
 # IntelliJ Pycharm Files 
 *.idea*
 
+# scraped fama french factor data
+*factor_info.zip
+*F-F_Research_Data_Factors.*
+
 # Cache files
 *.pyc
 
