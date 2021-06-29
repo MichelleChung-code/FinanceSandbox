@@ -7,6 +7,8 @@ import numpy as np
 import common.constants as const
 from SimpleStockDataPlot import extract_data
 import statsmodels.api as sm
+import seaborn as sn
+import matplotlib.pyplot as plt
 
 MKT_EXCESS = 'Mkt-RF'  # excess return on the market (market minus risk free rate)
 MKT_EXCESS_RENAME = 'MKT_EXCESS'
@@ -95,9 +97,15 @@ class FactorExposuresFamaFrench3Factor:
         # run regression
         model = sm.formula.ols(formula=f'{self.ticker} ~ {MKT_EXCESS_RENAME} + {SIZE} + {BK_TO_MKT}', data=df).fit()
 
+        # also get the factor covariance matrix
+        fact_cov_df = pd.DataFrame.cov(self.factor_data[[MKT_EXCESS, SIZE, BK_TO_MKT]])
+        sn.heatmap(fact_cov_df, annot=True, fmt='g')
+        plt.show()
+
         # return the params, beta vals are the factor exposures
         return {'model_params': model.params,
-                'fact_exposures': np.array(model.params)[1:]}  # of order MKT_EXCESS_RENAME, SIZE, BK_TO_MKT factors
+                'fact_exposures': np.array(model.params)[1:],  # of order MKT_EXCESS_RENAME, SIZE, BK_TO_MKT factors
+                'fact_cov': fact_cov_df}
 
     @staticmethod
     def factor_exposures_matrix(ls_assets):
