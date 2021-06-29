@@ -17,6 +17,12 @@ RISK_FREE_RATE = 'RF'
 
 class FactorExposuresFamaFrench3Factor:
     def __init__(self, ticker):
+        """
+        Class to regress a stock's returns over the fama french 3 factors to obtain the stock's factor exposures
+
+        Args:
+            ticker: <str> stock ticker
+        """
         self.ticker = ticker
         self.factor_data = self.scrape_fama_french_factor_data()
 
@@ -56,6 +62,7 @@ class FactorExposuresFamaFrench3Factor:
         self.factor_data.index = self.factor_data.index.to_period('M').to_timestamp('M')
 
     def get_stock_return_data(self):
+        """ Get the return data of the self.ticker stock from Yahoo Finance """
         str_date_ls = self.factor_data.index.strftime(const.DATE_STR_FORMAT)
         end_date = str_date_ls[-1]
 
@@ -94,6 +101,15 @@ class FactorExposuresFamaFrench3Factor:
 
     @staticmethod
     def factor_exposures_matrix(ls_assets):
+        """
+        Consolidate individual stock's factor exposures to the fama french 3 factors into a factor exposure matrix
+
+        Args:
+            ls_assets: <list> of assets to obtain the factor loadings for
+
+        Returns:
+            <np.ndarray> for the factor exposures matrix
+        """
         # create a num_assets x num_factors matrix
         num_factors = 3
         fact_exp_mat = np.zeros((len(ls_assets), num_factors))
