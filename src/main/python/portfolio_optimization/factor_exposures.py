@@ -89,9 +89,25 @@ class FactorExposuresFamaFrench3Factor:
         model = sm.formula.ols(formula=f'{self.ticker} ~ {MKT_EXCESS_RENAME} + {SIZE} + {BK_TO_MKT}', data=df).fit()
 
         # return the params, beta vals are the factor exposures
-        return model.params
+        return {'model_params': model.params,
+                'fact_exposures': np.array(model.params)[1:]}  # of order MKT_EXCESS_RENAME, SIZE, BK_TO_MKT factors
+
+    @staticmethod
+    def factor_exposures_matrix(ls_assets):
+        # create a num_assets x num_factors matrix
+        num_factors = 3
+        fact_exp_mat = np.zeros((len(ls_assets), num_factors))
+
+        for i, item in enumerate(ls_assets):
+            exposures = FactorExposuresFamaFrench3Factor(ticker=item)()['fact_exposures']
+            fact_exp_mat[i] = exposures
+
+        return fact_exp_mat
 
 
 if __name__ == '__main__':
     x = FactorExposuresFamaFrench3Factor(ticker="AAPL")
     print(x())
+
+    res = FactorExposuresFamaFrench3Factor.factor_exposures_matrix(['AAPL', 'GOOG'])
+    print(res)
