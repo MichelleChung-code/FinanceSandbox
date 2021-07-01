@@ -4,6 +4,7 @@ import datetime as dt
 import capm
 from sklearn.linear_model import LinearRegression
 import numpy as np
+import cvxpy as cp
 
 
 class CAPMFunctionsTest(unittest.TestCase):
@@ -27,4 +28,19 @@ class CAPMFunctionsTest(unittest.TestCase):
         y = np.array(self.df_stock_rets)
 
         lin_model = LinearRegression().fit(x, y)
-        self.assertTrue(np.allclose(beta_calc, lin_model.coef_))
+
+        # For fun, also do the regression with cvxpy
+        beta = cp.Variable()
+        intercept = cp.Variable()
+
+        # objective function is to minimize least squares
+        cost = cp.sum_squares(x * beta - y + intercept)
+        prob = cp.Problem(cp.Minimize(cost))
+        prob.solve()
+
+        print({'optimal_val': prob.value,
+               'optimal_beta': beta.value,
+               'norm_of_residual': cp.norm(cost, p=2).value})
+
+        # check that all three ways produce the same result!  Yay! 
+        self.assertTrue(np.allclose(beta_calc, lin_model.coef_, beta.value))
