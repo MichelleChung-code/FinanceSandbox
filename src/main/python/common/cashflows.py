@@ -20,6 +20,8 @@ def discounted_expected_uncertain_cashflows(probabilities, uncertain_cashflows, 
     return (probabilities.T.dot(uncertain_cashflows)) / (1 + rf_rate) ** t
 
 
+# todo look into intertemporal valuation formula for the valuation multipliers 
+
 def discounted_expected_uncertain_cashflows_risk_adjusted(probabilities, uncertain_cashflows, valuation_multipliers, t,
                                                           rf_rate=0.06):
     """
