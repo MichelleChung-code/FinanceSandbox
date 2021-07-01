@@ -2,12 +2,14 @@ import numpy as np
 from common.timeit import timeit
 from black_scholes_merton import BSM_pricing_value
 from common.simple_line_plot import show_line_plot
-
+import matplotlib.pyplot as plt
 
 @timeit
 def BSM_monte_carlo(iter_num, step_num, S, K, r, t, sigma):
     """
     Monte carlo computation of the call option price
+
+    Following the Markov property that tomorrow's process value only depends on today's process state
 
     Args:
         iter_num: <int> number of iterations of pseudo random numbers
@@ -41,6 +43,13 @@ def BSM_monte_carlo(iter_num, step_num, S, K, r, t, sigma):
 
     # get inner values
     inner_vals_ht = np.maximum(S_arr[-1] - K, 0)
+
+    # plot the log-normally distributed resulting end values
+    plt.hist(S_arr[-1], bins=50, alpha=0.5, histtype='bar', ec='k')
+    plt.ylabel('Frequency')
+    plt.xlabel('level')
+    plt.grid(True)
+    plt.show()
 
     # plot S_arr for the simulation of the changing price over the time intervals
     # Just plot the first 20 time intervals
