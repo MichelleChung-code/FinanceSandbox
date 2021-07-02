@@ -2,6 +2,7 @@ import numpy as np
 import scipy.stats as scs
 from common.timeit import timeit
 
+# For pricing European options - can only be executed at maturity/ expiration date
 
 def BSM_pricing_value(S, K, r, t, sigma):
     """
