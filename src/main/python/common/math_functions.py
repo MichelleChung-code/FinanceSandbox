@@ -1,5 +1,8 @@
 import numpy as np
 
+TOL = 1e-10
+
+
 def square_root_diffusion(time_steps, iter_num, t, x0, kappa, theta, sigma):
     """
     Return discretization scheme for general square-root diffusion
@@ -36,6 +39,29 @@ def square_root_diffusion(time_steps, iter_num, t, x0, kappa, theta, sigma):
     return x_next
 
 
+def standard_normal_with_moment_matching(size):
+    """
+    Apply moment matching to ensure that the pseudorandom numbers generated have a mean of 0 and standard deviation of 1
+
+    Args:
+        size: <int> size of pseudorandom number array
+
+    Returns:
+        <np.array> of random standard normal distributed numbers
+    """
+    orig_arr = np.random.standard_normal(size)
+
+    # reduce variance using moment matching
+    arr = (orig_arr - orig_arr.mean()) / orig_arr.std()
+
+    # Check the first and second moments
+    # Recall: Moments: 
+    # 1st (mean), 2nd (variance), 3rd (skew), and 4th (kurtosis)
+    assert abs(arr.mean() - 0) <= TOL and abs(arr.std() - 1) <= TOL
+
+    return arr
+
+
 if __name__ == '__main__':
     x0 = 0.1
     kappa = 3.0
@@ -47,3 +73,5 @@ if __name__ == '__main__':
 
     x = square_root_diffusion(M, I, 2, x0, kappa, theta, sigma)
     print(x)
+
+    print(standard_normal_with_moment_matching(10))
