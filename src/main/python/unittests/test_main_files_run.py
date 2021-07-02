@@ -2,6 +2,7 @@
 import unittest
 from dateutil.relativedelta import relativedelta
 import datetime as dt
+import numpy as np
 
 
 class MainFilesRun(unittest.TestCase):
@@ -16,10 +17,17 @@ class MainFilesRun(unittest.TestCase):
     def test_black_scholes_merton(self):
         """ Tests successful run of black_scholes_merton.py and BSM_MonteCarlo.py """
         from black_scholes_merton import BSM_pricing_value
-        from BSM_MonteCarlo import BSM_monte_carlo
+        from BSM_MonteCarlo import BSM_monte_carlo, BSM_monte_carlo_at_maturity_only
 
         BSM_monte_carlo(500000, 100, 100, 200, 0.05, 2, 0.2)
         BSM_pricing_value(100, 200, 0.05, 2, 0.2)
+
+        call_option = BSM_monte_carlo_at_maturity_only(50000, 100, 110, 0.05, 1, 0.25, option_type='call')
+        put_option = BSM_monte_carlo_at_maturity_only(50000, 100, 110, 0.05, 1, 0.25, option_type='put')
+
+        # larger error tolerance since monte carlo and random number generation may yield slightly diff results
+        # each time
+        self.assertTrue(np.allclose([call_option, put_option], [8, 12], rtol=1))
 
     def test_candlestick_chart(self):
         """ Tests successful run of candlestick_chart.py """
