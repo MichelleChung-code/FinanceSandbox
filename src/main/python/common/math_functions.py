@@ -44,7 +44,7 @@ def standard_normal_with_moment_matching(size):
     Apply moment matching to ensure that the pseudorandom numbers generated have a mean of 0 and standard deviation of 1
 
     Args:
-        size: <int> size of pseudorandom number array
+        size: <int> or <tuple> size of pseudorandom number array
 
     Returns:
         <np.array> of random standard normal distributed numbers
@@ -55,7 +55,7 @@ def standard_normal_with_moment_matching(size):
     arr = (orig_arr - orig_arr.mean()) / orig_arr.std()
 
     # Check the first and second moments
-    # Recall: Moments: 
+    # Recall: Moments:
     # 1st (mean), 2nd (variance), 3rd (skew), and 4th (kurtosis)
     assert abs(arr.mean() - 0) <= TOL and abs(arr.std() - 1) <= TOL
 
@@ -74,4 +74,4 @@ if __name__ == '__main__':
     x = square_root_diffusion(M, I, 2, x0, kappa, theta, sigma)
     print(x)
 
-    print(standard_normal_with_moment_matching(10))
+    print(standard_normal_with_moment_matching((5, 6)))
