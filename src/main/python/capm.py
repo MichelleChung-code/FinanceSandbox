@@ -1,6 +1,8 @@
 from common.common_functions import get_price_data, daily_risk_free_rate
 import datetime as dt
 import common.constants as const
+import cvxpy as cp
+import numpy as np
 
 
 # Dealing all with daily data
@@ -25,6 +27,35 @@ def calc_beta(df_stock_rets, df_benchmark):
 
     # beta is covar(a,b)/ var(b); where a is the individual stock and b is the benchmark
     return covar / bench_var
+
+
+def calc_beta_regression(df_stock_rets, df_benchmark):
+    """
+    Calculate beta by regressing stock returns against the benchmark returns
+
+    Args:
+        df_stock_rets: <pd.DataFrame> of the returns of the stock to evaluate
+        df_benchmark: <pd.DataFrame> of the benchmark returns
+
+    Returns:
+        <float> beta value
+    """
+    x = np.array(df_benchmark)
+    y = np.array(df_stock_rets)
+
+    beta = cp.Variable()
+    intercept = cp.Variable()
+
+    # objective function is to minimize least squares
+    cost = cp.sum_squares(x * beta - y + intercept)
+    prob = cp.Problem(cp.Minimize(cost))
+    prob.solve()
+
+    print({'optimal_val': prob.value,
+           'optimal_beta': beta.value,
+           'norm_of_residual': cp.norm(cost, p=2).value})
+
+    return beta.value
 
 
 def excess_return_daily(df_rets, df_market_rets, beta, rf_rate_annual=0.09 / 100):
