@@ -23,14 +23,49 @@ class OANDAData:
         assert self.api.account_type == 'practice'  # make sure we're not using a live account zzz
 
     def _check_valid_technical_instrument_name(self, instrument_name):
+        """
+        Check that instrument_name is a valid instrument on OANDA for data
+
+        Args:
+            instrument_name: <str> technical instrument name
+
+        Returns:
+            <bool> True if instrument_name is valid
+        """
         ls_valid_instruments_tups = self.api.get_instruments()
         return instrument_name in (x[1] for x in ls_valid_instruments_tups)
 
     def get_historic_data(self, instrument_name, start_date, end_date, freq, price_type):
-        self._check_valid_technical_instrument_name(instrument_name)
+        """
+        Get historic data from OANDA
+
+        Args:
+            instrument_name: <str> technical instrument name on OANDA
+            start_date: <str> YYYY-MM-DD to start getting data
+            end_date: <str> YYYY-MM-DD to end getting data
+            freq: <str> data frequency i.e. 'H1' for 1 hour, 'D' for daily, etc.
+            price_type: <str> 'A' for ask and 'B' for bid
+
+        Returns:
+            <pd.DataFrame> of data returned, in form of candlestick data i.e. open, close, high, low prices
+        """
+        # first check that this is valid
+        assert self._check_valid_technical_instrument_name(instrument_name)
         df = self.api.get_history(instrument=instrument_name, start=start_date, end=end_date, granularity=freq,
                                   price=price_type)
         return df
+
+    def stream_current_data(self, instrument_name, max_iter: int):
+        """
+        Stream data real time - print results to console output
+
+        Args:
+            instrument_name: <str> technical OANDA instrument name
+            max_iter: <int> max data points to stream
+
+        """
+        assert self._check_valid_technical_instrument_name(instrument_name)
+        print(self.api.stream_data(instrument=instrument_name, stop=max_iter))
 
 
 # Note: 15/month quota
@@ -72,5 +107,6 @@ class GetTickData:
 
 if __name__ == '__main__':
     x = OANDAData()
-    test = x.get_historic_data("EUR_USD", "2021-07-01", "2021-07-05", "H1", "B")
-    print(test)
+    # test = x.get_historic_data("SPX500_USD", "2021-07-01", "2021-07-05", "H1", "B")
+    # print(test)
+    x.stream_current_data("SPX500_USD", 10)
