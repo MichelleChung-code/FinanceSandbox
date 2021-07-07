@@ -3,6 +3,7 @@ import json
 import ast
 import pandas as pd
 import matplotlib.pyplot as plt
+import tpqoa
 
 # password stored locally
 pass_key_path = r'C:\Users\tkdmc\Documents\GitHub\mchung_pass\mchung_pass.json'
@@ -11,6 +12,25 @@ with open(pass_key_path) as f:
     data = json.load(f)
 
 mchung_quotient_key = data['quotient_api']
+
+mchung_oanda_config_path = r'C:\Users\tkdmc\Documents\GitHub\mchung_pass\oanda.cfg'
+
+
+class OANDAData:
+    def __init__(self):
+        # create connection to API
+        self.api = tpqoa.tpqoa(mchung_oanda_config_path)
+        assert self.api.account_type == 'practice'  # make sure we're not using a live account zzz
+
+    def _check_valid_technical_instrument_name(self, instrument_name):
+        ls_valid_instruments_tups = self.api.get_instruments()
+        return instrument_name in (x[1] for x in ls_valid_instruments_tups)
+
+    def get_historic_data(self, instrument_name, start_date, end_date, freq, price_type):
+        self._check_valid_technical_instrument_name(instrument_name)
+        df = self.api.get_history(instrument=instrument_name, start=start_date, end=end_date, granularity=freq,
+                                  price=price_type)
+        return df
 
 
 # Note: 15/month quota
@@ -51,5 +71,6 @@ class GetTickData:
 
 
 if __name__ == '__main__':
-    x = GetTickData('AAPL')
-    x()
+    x = OANDAData()
+    test = x.get_historic_data("EUR_USD", "2021-07-01", "2021-07-05", "H1", "B")
+    print(test)
