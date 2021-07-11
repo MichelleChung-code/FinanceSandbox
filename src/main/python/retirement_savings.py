@@ -30,8 +30,8 @@ class RetirementSavings:
         sol = self.calculate_annual_contributions()
 
         # return the annual and monthly contribution amounts required
-        return {'annual_contributions': sol,
-                'monthly_contributions': sol / 12}
+        return {'annual_contributions': round(sol, 2),
+                'monthly_contributions': round(sol / 12, 2)}
 
     def calculate_annual_contributions(self):
         # make contributions at the beginning of the month
@@ -56,5 +56,5 @@ class RetirementSavings:
 
 
 if __name__ == '__main__':
-    x = RetirementSavings(age=22, current_amount=0)
+    x = RetirementSavings(age=23, current_amount=0, average_annual_ret=0.06)
     print(x())
