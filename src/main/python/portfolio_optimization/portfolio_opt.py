@@ -146,6 +146,7 @@ class MinRiskOptimizePortfolio:
         self.min_ret = min_ret
 
     def run_opt(self):
+        """ Run optimization for the minimum risk portfolio that exceeds a required minimum return """
         w = cp.Variable(self.n)
         rets = self.mu.T @ w
         risk = cp.quad_form(w, self.sigma)
