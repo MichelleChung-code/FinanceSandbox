@@ -138,6 +138,28 @@ class MarkowitzOptimizePortfolio:
         return res_dict
 
 
+class MinRiskOptimizePortfolio:
+    def __init__(self, num_assets: int, sigma, mu, min_ret=0.1):
+        self.n = num_assets
+        self.sigma = sigma
+        self.mu = mu
+        self.min_ret = min_ret
+
+    def run_opt(self):
+        w = cp.Variable(self.n)
+        rets = self.mu.T @ w
+        risk = cp.quad_form(w, self.sigma)
+
+        # cp.norm(w, 1) <= 2, sum of |x_i| must be <= 2
+        # requires return greater than min_ret
+        # fully invested portfolio
+        constraints_ls = [cp.sum(w) == 1, rets >= self.min_ret, cp.norm(w, 1) <= 2]
+
+        prob = cp.Problem(cp.Minimize(risk), constraints_ls)
+        prob.solve()
+        return w.value
+
+
 if __name__ == '__main__':
     ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
 
@@ -149,3 +171,7 @@ if __name__ == '__main__':
     results_dict = x()
 
     print(results_dict)
+
+    y = MinRiskOptimizePortfolio(num_assets=preprocess.n, mu=preprocess_res['expected_returns'],
+                                 sigma=preprocess_res['covariance_matrix'])
+    print(y.run_opt())
