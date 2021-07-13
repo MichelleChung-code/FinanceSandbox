@@ -161,6 +161,28 @@ class MinRiskOptimizePortfolio:
         return w.value
 
 
+class WorstCaseRiskPortfolio:
+    def __init__(self, num_assets: int, sigma, w):
+        self.n = num_assets
+        self.sigma = sigma
+        self.w = w
+
+    def run_opt(self):
+        """ Run optimization for the worst case risk over possible covariance matrices """
+        sigma_opt = cp.Variable((self.n, self.n), PSD=True)  # positive semi-definite
+        delta = cp.Variable((self.n, self.n), symmetric=True)  # difference between the input covar and the testing ones
+        risk = cp.quad_form(self.w, sigma_opt)
+
+        # elementwise delta constrained and must be zero on diagonals
+        constraints_ls = [sigma_opt == self.sigma + delta, cp.diag(delta) == 0, cp.abs(delta) <= 0.2]
+
+        prob = cp.Problem(cp.Maximize(risk), constraints_ls)
+        prob.solve()
+        return {'actual_std': cp.sqrt(cp.quad_form(self.w, self.sigma)).value,
+                'worst_case_std': cp.sqrt(risk).value,
+                'delta': delta.value}
+
+
 if __name__ == '__main__':
     ls_assets = ['AAPL', 'NKE', 'GOOGL', 'AMZN']
 
@@ -175,4 +197,8 @@ if __name__ == '__main__':
 
     y = MinRiskOptimizePortfolio(num_assets=preprocess.n, mu=preprocess_res['expected_returns'],
                                  sigma=preprocess_res['covariance_matrix'])
-    print(y.run_opt())
+
+    w = y.run_opt()
+
+    z = WorstCaseRiskPortfolio(num_assets=preprocess.n, sigma=preprocess_res['covariance_matrix'], w=w)
+    print(z.run_opt())
